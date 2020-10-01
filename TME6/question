@@ -1,0 +1,31 @@
+Exo 1
+=====
+
+1/
+Un processus gagne l'election lorsqu'il recoit un message de type OUT de lui-même
+(ie. lorsque le message a fait le tour de l'anneau sans qu'il soit détruit par
+un processus). L'élu doit toujours avoir l'identifiant minimum parmis les
+initiateurs.
+
+2/
+Un message est de la forme < emetteur, initiateur, tag, min_local >
+A chaque fois qu'un proc émet un message, il doit calculer le minimum.
+Pour cela, si le proc est initiateur, il doit déterminer si son minimum local
+est le plus petit parmis tous ceux qu'il a reçu de ses voisins. Sinon, il
+calcule le minimum parmis les min locaux reçu de ses voisins.
+
+Lors de la reception d'un message REVEIL :
+
+    Si proc n'a pas été réveillé:
+        Si proc est feuille:
+            Envoi un message IDENT a son unique voisin
+        Sinon:
+            Envoi REVEIL à tous ses voisins sauf celui qui l'a reveillé
+
+Lors de la reception d'un message IDENT :
+
+    Si proc a recu IDENT de tous les voisins sauf 1:
+        Envoi du minimum au voisin qui n'a pas envoyé IDENT
+    Sinon, si proc a recu IDENT de tous les voisins:
+        Envoi du minimum à tous ses voisins sauf celui qui l'a envoyé IDENT
+        (on connait ici le proc élu)
